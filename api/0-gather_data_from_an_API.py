@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 """ Getting my first apis """
 
-import sys
-from requests import get
 from json import loads
+from requests import get
+import sys
+
 
 def get_employee_todo_progress(employee_id):
-    # Fetch TODO list from the API
+    # Get TODO list from the API
     response = get(f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}')
     todos = loads(response.text)
 
