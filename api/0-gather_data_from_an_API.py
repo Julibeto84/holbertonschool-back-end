@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+""" Getting my first apis """
 
 import sys
 from requests import get
