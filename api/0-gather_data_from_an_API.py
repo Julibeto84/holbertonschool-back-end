@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 
 
-from requests import get
 from json import loads
+from requests import get
+
 
 
 # the required first parameter of the 'get' method is the 'url':
