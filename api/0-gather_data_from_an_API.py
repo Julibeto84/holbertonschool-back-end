@@ -2,9 +2,8 @@
 """ Getting my first apis """
 
 from json import loads
-import sys
 from requests import get
-
+import sys
 
 
 def get_employee_todo_progress(employee_id):
