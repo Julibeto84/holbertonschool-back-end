@@ -28,4 +28,3 @@ if __name__ == "__main__":
     for todo_finish in completed:
         print(todo_finish['title'], file=sys.stdout)
 
-
