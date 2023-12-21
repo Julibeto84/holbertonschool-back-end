@@ -15,9 +15,9 @@ users_tasks = dict()
 for todo in todos:
     user_id = todo['userId']
     if user_id not in users_tasks:
-        users_tasks[user_id] = list()     
+        users_tasks[user_id] = list()
     user_title = todo['title']
     users_tasks[user_id].append(user_title)
-    
-#print the response text (the content of the requested file):
+
+# print the response text (the content of the requested file):
 print(users_tasks)
