@@ -27,4 +27,3 @@ if __name__ == "__main__":
         .format(user['name'], len(completed), all_todos), file=sys.stdout)
     for todo_finish in completed:
         print(todo_finish['title'], file=sys.stdout)
-
