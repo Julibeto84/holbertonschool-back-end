@@ -7,6 +7,7 @@ import sys
 
 
 def get_employee_todo_progress(employee_id):
+    
     # Fetch TODO list from the API
     todos_response = get('https://jsonplaceholder.typicode.com/todos?userId={}'.format(employee_id))
     todos = loads(todos_response.text)
