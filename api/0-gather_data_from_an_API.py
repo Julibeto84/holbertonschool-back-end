@@ -1,24 +1,31 @@
 #!/usr/bin/python3
+""" Getting my first apis """
+import json
+import requests
+import sys
 
 
-from json import loads
-from requests import get
+if __name__ == "__main__":
+    """Get API"""
+    todos_api = requests.get(
+        'https://jsonplaceholder.typicode.com/todos/')
+    user_api = requests.get(
+        'https://jsonplaceholder.typicode.com/users/{}'.format(sys.argv[1]))
+    todo_data = todos_api.text
+    user_data = user_api.text
+    user = json.loads(user_data)
+    todos = json.loads(todo_data)
+    completed = []
+    all_todos = 0
+    for todo in todos:
+        if todo['userId'] == user['id']:
+            if todo['completed']:
+                completed.append(todo)
+            all_todos += 1
+    print(
+        'Employee {} is done with tasks({}/{}):'
+        .format(user['name'], len(completed), all_todos), file=sys.stdout)
+    for todo_finish in completed:
+        print(todo_finish['title'], file=sys.stdout)
 
 
-
-# the required first parameter of the 'get' method is the 'url':
-response = get('https://jsonplaceholder.typicode.com/todos')
-
-todos = loads(response.text)
-todos_done = list(filter(lambda todo: todo['completed'], todos))
-users_tasks = dict()
-
-for todo in todos:
-    user_id = todo['userId']
-    if user_id not in users_tasks:
-        users_tasks[user_id] = list()
-    user_title = todo['title']
-    users_tasks[user_id].append(user_title)
-
-# print the response text (the content of the requested file):
-print(users_tasks)
