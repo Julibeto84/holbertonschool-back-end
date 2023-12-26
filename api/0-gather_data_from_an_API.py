@@ -9,13 +9,13 @@ import sys
 def get_employee_todo_progress(employee_id):
 
     # Fetch TODO list from the API
-    todos_response = get(
-        'https://jsonplaceholder.typicode.com/todos?userId={}'.format(employee_id))
+    todos_response = get('https://jsonplaceholder.typicode.com/todos?userId={}'
+                         .format(employee_id))
     todos = loads(todos_response.text)
 
     # Fetch user name from the API
-    users_response = get(
-        'https://jsonplaceholder.typicode.com/users/{}'.format(employee_id))
+    users_response = get('https://jsonplaceholder.typicode.com/users/{}'
+                         .format(employee_id))
     user = loads(users_response.text)
 
     # Filter completed tasks
