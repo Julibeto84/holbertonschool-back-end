@@ -26,7 +26,7 @@ def get_employee_todo_progress(employee_id):
     total_number_of_tasks = len(todos)
 
     # Display the progress
-    employee_name = user.get('name')
+    employee_name = user
     print("Employee {} is done with tasks ({}/{})"
           .format(employee_name, number_of_done_tasks, total_number_of_tasks))
 
