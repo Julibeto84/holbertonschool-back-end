@@ -5,6 +5,11 @@ import requests
 import sys
 
 
+def format_employee_name(name, max_length=18):
+    """Format employee name with truncation if necessary."""
+    return (name[:max_length - 3] + '...') if len(name) > max_length else name
+
+
 if __name__ == "__main__":
     """Get API"""
     todos_api = requests.get(
@@ -22,8 +27,11 @@ if __name__ == "__main__":
             if todo['completed']:
                 completed.append(todo)
             all_todos += 1
+    
+    formatted_name = format_employee_name(user['name'])
     print(
         'Employee {} is done with tasks({}/{}):'
-        .format(user['name'], len(completed), all_todos), file=sys.stdout)
+        .format(formatted_name, len(completed), all_todos), file=sys.stdout)
+    
     for finished_todo in completed:
         print('\t {}'.format(finished_todo['title']), file=sys.stdout)
