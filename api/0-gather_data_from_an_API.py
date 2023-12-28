@@ -1,48 +1,27 @@
 #!/usr/bin/python3
-"""Returns to-do list information for a given employee ID."""
-import requests
-import sys
+'''for a given employee ID, returns information
+   about his/her TODO list progress.'''
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: script.py <employee_id>")
-        sys.exit(1)
+if __name__ == '__main__':
+    import requests
+    from sys import argv
 
-    try:
-        employee_id = int(sys.argv[1])
-    except ValueError:
-        print("Error: Employee ID must be an integer.")
-        sys.exit(1)
+    user = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
+                        format(argv[1]))
+    tasks = requests.get('https://jsonplaceholder.typicode.com/users/{}/todos'.
+                         format(argv[1]))
+    done_list = []
+    done_tasks = 0
+    total_tasks = 0
 
-    # Obtener la respuesta de la API para el usuario
-    user_response = requests.get(f'https://jsonplaceholder.typicode.com/users/{employee_id}')
-    # Obtener la respuesta de la API para los todos
-    todos_response = requests.get(f'https://jsonplaceholder.typicode.com/users/{employee_id}/todos')
+    employee_name = user.json()['name']
+    for task in tasks.json():
+        total_tasks += 1
+        if task['completed'] is True:
+            done_list.append(task['title'])
+            done_tasks += 1
 
-    # Convertir la respuesta a JSON
-    user = user_response.json()
-    todos = todos_response.json()
-
-    # Verificar si se obtuvieron datos válidos
-    if not user or not todos:
-        print("Error: No data found for the provided employee ID.")
-        sys.exit(1)
-
-    # Depuración: imprimir la respuesta de la API directamente
-    print("User API Response:", user_response.text)
-    print("Todos API Response:", todos_response.text)
-
-    # Filtrar tareas completadas
-    completed = [todo["title"] for todo in todos if todo.get("completed")]
-
-    # Extraer y depurar el nombre del empleado
-    employee_name = user.get("name").strip()
-    print("Employee Name:", employee_name)  # Depuración
-
-    # Imprimir el progreso del empleado
-    print(f"Employee {employee_name} is done with tasks({len(completed)}/{len(todos)}):")
-
-    # Imprimir tareas completadas
-    for task in completed:
-        print(f"\t {task}")
-
+    print("Employee {} is done with tasks({}/{}):".
+          format(employee_name, done_tasks, total_tasks))
+    for task in done_list:
+        print("\t {}".format(task))
