@@ -14,10 +14,8 @@ if __name__ == "__main__":
         print("Error: Employee ID must be an integer.")
         sys.exit(1)
 
-    user_response = requests.get('https://jsonplaceholder.typicode.com/users/{}'
-                                 .format(employee_id))
-    todos_response = requests.get('https://jsonplaceholder.typicode.com/users/{}/todos'
-                                  .format(employee_id))
+    user_response = requests.get('https://jsonplaceholder.typicode.com/users/{}'.format(employee_id))
+    todos_response = requests.get('https://jsonplaceholder.typicode.com/users/{}/todos'.format(employee_id))
 
     user = user_response.json()
     todos = todos_response.json()
@@ -28,8 +26,10 @@ if __name__ == "__main__":
 
     completed = [todo["title"] for todo in todos if todo.get("completed")]
 
-    print("Employee {} is done with tasks({}/{}):".format(
-    user.get("name"), len(completed), len(todos)))
+    # Asegurarse de que el nombre del empleado no tenga espacios adicionales
+    employee_name = user.get("name").strip()
+
+    print("Employee {} is done with tasks({}/{}):".format(employee_name, len(completed), len(todos)))
 
     for task in completed:
         print("\t {}".format(task))
