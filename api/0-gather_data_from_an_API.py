@@ -1,28 +1,28 @@
 #!/usr/bin/python3
-'''For a given employee ID, returns information about his/her TODO list progress.'''
+'''for a given employee ID, returns information
+   about his/her TODO list progress.'''
 
 if __name__ == '__main__':
     import requests
     from sys import argv
 
-    user_response = requests.get(f'https://jsonplaceholder.typicode.com/users/{argv[1]}')
+    user = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
+                        format(argv[1]))
+    tasks = requests.get('https://jsonplaceholder.typicode.com/users/{}/todos'.
+                         format(argv[1]))
+    done_list = []
+    done_tasks = 0
+    total_tasks = 0
 
-    # Comprobamos que la respuesta de la API sea exitosa
-    if user_response.status_code != 200:
-        print("Error: Unable to retrieve data from the API.")
-        exit(1)
+    employee_name = user.json()['name']
+    for task in tasks.json():
+        total_tasks += 1
+        if task['completed'] is True:
+            done_list.append(task['title'])
+            done_tasks += 1
 
-    user = user_response.json()
-
-    # Comprobamos que tenemos datos válidos
-    if not user:
-        print("Error: No data found for the provided employee ID.")
-        exit(1)
-
-    # Truncar el nombre y agregar puntos suspensivos si es necesario
-    max_name_length = 18
-    truncated_name = (user['name'][:max_name_length - 3] + '...') if len(user['name']) > max_name_length else user['name']
-
-    # Imprimir solo el nombre del usuario
-    print(f"Employee Name: {truncated_name}")
+    print("Employee {} is done with tasks({}/{}):".
+          format(employee_name, done_tasks, total_tasks))
+    for task in done_list:
+        print("\t {}".format(task))
 
