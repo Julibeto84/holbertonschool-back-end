@@ -6,24 +6,23 @@ if __name__ == '__main__':
     from sys import argv
 
     user_response = requests.get(f'https://jsonplaceholder.typicode.com/users/{argv[1]}')
-    tasks_response = requests.get(f'https://jsonplaceholder.typicode.com/users/{argv[1]}/todos')
 
     # Comprobamos que la respuesta de la API sea exitosa
-    if user_response.status_code != 200 or tasks_response.status_code != 200:
+    if user_response.status_code != 200:
         print("Error: Unable to retrieve data from the API.")
         exit(1)
 
     user = user_response.json()
-    tasks = tasks_response.json()
 
     # Comprobamos que tenemos datos válidos
-    if not user or not tasks:
+    if not user:
         print("Error: No data found for the provided employee ID.")
         exit(1)
 
-    done_tasks = sum(1 for task in tasks if task['completed'])
+    # Truncar el nombre y agregar puntos suspensivos si es necesario
+    max_name_length = 18
+    truncated_name = (user['name'][:max_name_length - 3] + '...') if len(user['name']) > max_name_length else user['name']
 
-    print(f"Employee {user['name']} is done with tasks({done_tasks}/{len(tasks)}):")
-    for task in tasks:
-        if task['completed']:
-            print(f"\t {task['title']}")
+    # Imprimir solo el nombre del usuario
+    print(f"Employee Name: {truncated_name}")
+
