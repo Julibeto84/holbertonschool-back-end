@@ -4,12 +4,12 @@
 
 if __name__ == '__main__':
     import requests
-    from sys import argv
+    import sys
 
     user = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
-                        format(argv[1]))
+                        format(sys.argv[1]))
     tasks = requests.get('https://jsonplaceholder.typicode.com/users/{}/todos'.
-                         format(argv[1]))
+                         format(sys.argv[1]))
     done_list = []
     done_tasks = 0
     total_tasks = 0
