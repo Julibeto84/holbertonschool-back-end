@@ -25,4 +25,3 @@ if __name__ == '__main__':
           format(employee_name, done_tasks, total_tasks))
     for task in done_list:
         print("\t {}".format(task))
-
