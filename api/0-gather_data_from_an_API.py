@@ -1,27 +1,42 @@
 #!/usr/bin/python3
-'''for a given employee ID, returns information
-   about his/her TODO list progress.'''
+"""Returns to-do list information for a given employee ID."""
+import requests
+import sys
 
-if __name__ == '__main__':
-    import requests
-    import sys
+def fetch_todo_list_progress(employee_id):
+    # API URL
+    api_url = f'https://jsonplaceholder.typicode.com/users/{employee_id}/todos'
 
-    user = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
-                        format(sys.argv[1]))
-    tasks = requests.get('https://jsonplaceholder.typicode.com/users/{}/todos'.
-                         format(sys.argv[1]))
-    done_list = []
-    done_tasks = 0
-    total_tasks = 0
+    # Make the request to the API
+    response = requests.get(api_url)
 
-    employee_name = user.json()['name']
-    for task in tasks.json():
-        total_tasks += 1
-        if task['completed'] is True:
-            done_list.append(task['title'])
-            done_tasks += 1
+    # Check the status code of the response
+    if response.status_code != 200:
+        print(f"Error: Unable to fetch data for employee {employee_id}")
+        return
+    
+    # Convert a JSON string to a Python object
+    todos = response.json()
 
+    # Filter completed and uncompleted tasks
+    completed_tasks = [list(filter(lambda todo: todo['completed'], todos))]
+    total_tasks = len(todos)
+
+    # Display the information in the required format
     print("Employee {} is done with tasks({}/{}):".
-          format(employee_name, done_tasks, total_tasks))
-    for task in done_list:
-        print("\t {}".format(task))
+          format(todos, completed_tasks, total_tasks))
+    
+    for task in completed_tasks:
+         print("\t {}".format(task))
+
+if __name__ == "__main__":
+    # Check if an argument (employee ID) is given
+    if len(sys.argv) != 2:
+        print("Usage: python script_name.py <employee_id>")
+        sys.exit(1)
+
+    # Get employee ID from command line arguments
+    employee_id = int(sys.argv[1])
+
+    # Call the function to obtain and print the information.
+    fetch_todo_list_progress(employee_id)
