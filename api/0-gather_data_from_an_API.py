@@ -2,26 +2,24 @@
 '''for a given employee ID, returns information
    about his/her TODO list progress.'''
 
-if __name__ == '__main__':
-    import requests
-    from sys import argv
+from requests import get
+from json import loads
 
-    user = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
-                        format(argv[1]))
-    tasks = requests.get('https://jsonplaceholder.typicode.com/users/{}/todos'.
-                         format(argv[1]))
-    done_list = []
-    done_tasks = 0
-    total_tasks = 0
 
-    employee_name = user.json()['name']
-    for task in tasks.json():
-        total_tasks += 1
-        if task['completed'] is True:
-            done_list.append(task['title'])
-            done_tasks += 1
+#the required first parameter of the 'get' method is the 'url':
+response = get('https://jsonplaceholder.typicode.com/todos')
 
-    print("Employee {} is done with tasks({}/{}):".
-          format(employee_name, done_tasks, total_tasks))
-    for task in done_list:
-        print("\t {}".format(task))
+todos = loads (response.text)
+todos_done = list(filter(lambda todo: todo['completed'], todos))
+users_tasks = dict()
+
+for todo in todos:
+    user_id = todo['userId']
+    if not user_id in users_tasks:
+        users_tasks[user_id] = list()     
+    user_title = todo['title']
+    users_tasks[user_id].append(user_title)
+    
+#print the response text (the content of the requested file):
+print(users_tasks)
+
