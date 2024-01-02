@@ -18,4 +18,3 @@ if __name__ == '__main__':
             row = [user['id'], user['username'],
                    task['completed'], task['title']]
             writer.writerow(row)
-
