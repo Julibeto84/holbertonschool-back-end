@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-'''for a given employee ID, returns information
-   about his/her TODO list progress.'''
+"""Returns to-do list information for a given employee ID."""
 
 if __name__ == '__main__':
     import requests
